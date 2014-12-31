@@ -55,11 +55,14 @@ $levylista_formats = array(
 function levylista_activate() {
     levylista_create_post_type();
     flush_rewrite_rules();
-    add_rewrite_endpoint( "esittajat", EP_PAGES );
+    levylista_init_rewrites();
 
 }
 register_activation_hook( __FILE__, 'levylista_activate' );
 
+/*
+ * Execute every time Wordpress starts
+ */
 
 function levylista_create_post_type() {
 
@@ -217,11 +220,11 @@ add_filter( "manage_edit-levylista_levy_sortable_columns", "sortable_columns" );
 
 add_action( 'add_meta_boxes', 'levylista_meta_boxes' );
 function levylista_meta_boxes() {
-    add_meta_box("levylista-meta-perustiedot", "Levyn perustiedot", "levylista_meta_basic_info",
+    add_meta_box('levylista-meta-basic-info', "Levyn perustiedot", "levylista_meta_basic_info",
         "levylista_levy", "advanced", "high");
 //     add_meta_box("levylista-meta-lisatiedot", "Levyn lisätiedot", "levylista_meta_additional_info",
 //         "levylista_levy", "side", "high");
-    add_meta_box("levylista-meta-kommentit", "Kommentit", "levylista_meta_comment",
+    add_meta_box('levylista-meta-comment', "Kommentit", "levylista_meta_comment",
         "levylista_levy", "normal", "high");
 
 }
@@ -442,35 +445,6 @@ function levylista_count_albums($query) {
     return array ( 'artists' => $artists, 'albums' => $albums, 'years' => $years, 'formats' => $formats);
 }
 
-// function levylista_count_formats($query) {
-//     $formats = array();
-//     while($query->have_posts()) {
-//         $query->the_post();
-//         $format = levylista_get_the_format();
-//         if(!array_key_exists($format, $formats)) {
-//             $formats[$format] = 1;
-//         } else {
-//             $formats[$format]++;
-//         }
-//     }
-//     
-//     return $formats;
-// }
-// 
-// function levylista_count_years($query) {
-//     $years = array();
-//     while($query->have_posts()) {
-//         $query->the_post();
-//         $year = levylista_get_the_year();
-//         if(!array_key_exists($year, $years)) {
-//             $years[$year] = 1;
-//         } else {
-//             $years[$year]++;
-//         }
-//     }
-//     
-//     return $years;
-// }
 
 /*
  *Create statistics
