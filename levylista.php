@@ -92,6 +92,7 @@ function levylista_create_post_type() {
         'author',
         'thumbnail',
       ),
+      'menu-icon' => 'dashicons-album',
       'rewrite' => array("slug" => "levyt")
     )
   );
