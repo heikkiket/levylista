@@ -16,6 +16,6 @@
 <h3>Vuodet</h3>
 <ul class="levylista-stats">
 <? foreach($counted['years'] as $year => $amount) {
-    echo '<li><a href="' . levylista_the_year_url($year) . '">' . $year . ' : ' . $amount . '</a></li>';
+    echo '<li><a href="' . levylista_get_the_year_url($year) . '">' . $year . ' : ' . $amount . '</a></li>';
 } ?>
 </ul>
