@@ -7,7 +7,15 @@
 // Let's get the artist_slug variable if it isn't set
 if(!isset($levylista_artist_slug)) global $levylista_artist_slug; 
 ?>
- 
+
+<p>Tällä levylistalla on kaikkiaan <?php echo $how_many_albums ?> levyä
+<?php echo $how_many_artists; ?> eri esittäjältä.
+Formaateista yleisin on <?php echo key($counted['formats']) ?>,
+joita on listalla peräti <?php echo current($counted['formats']) ?> kpl.
+</p>
+<p>Musiikkia listalla on useilta vuosilta ja vuosikymmeniltä, kaikkiaan
+<?php echo count($counted['years']) ?> eri vuodelta.</p>
+
 <p><a href="<?php echo site_url() ?>/levyt"><?php _e('Levyjä:', 'levylista') ?> <?php echo $how_many_albums ?></a></p>
 <p><a href="
 <?php echo site_url() . '/' . $levylista_artist_slug ?>"><?php _e('Eri esittäjiä:', 'levylista'); echo $how_many_artists; ?>
