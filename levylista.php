@@ -3,6 +3,8 @@
  * Plugin Name: Heikin levylista
  * Plugin URI: http://heikkiket.kapsi.fi
  * Description: Heikin upea levykatalooki
+ * Text Domain: levylista
+ * Domain Path: /languages
  * Version: 1.0
  * Author: Heikki Ketoharju
  * Author URI: http://heikki.ketoharju.info
@@ -11,6 +13,8 @@
 
 defined('ABSPATH') or die("No script kiddies please!");
 
+$levylista_year_slug = "vuodet";
+$levylista_artist_slug = "esittajat";
 
 $levylista_formats = array(
         'none' => '--',
@@ -44,9 +48,14 @@ $levylista_formats = array(
         'vhs' => 'VHS',
         '10i;' => '10"',
         '12i;' => '12"',
-        'muu'=> 'Muu',
+        'muu'=> __('Muu', 'levylista')
 );
 
+/*
+ * Enable translations
+ */
+ 
+load_plugin_textdomain('your-unique-name', false, basename( dirname( __FILE__ ) ) . '/languages' );
 
 /*
  * Execute during install
@@ -67,19 +76,19 @@ register_activation_hook( __FILE__, 'levylista_activate' );
 function levylista_create_post_type() {
 
     $labels = array(
-        'name'               => _x( 'Levyt', 'post type general name', 'levylista-textdomain' ),
-        'singular_name'      => _x( 'Levy', 'post type singular name', 'levylista-textdomain' ),
-        'menu_name'          => _x( 'Levyt', 'admin menu', 'levylista-textdomain' ),
-        'name_admin_bar'     => _x( 'Levy', 'add new on admin bar', 'levylista-textdomain' ),
-        'add_new'            => _x( 'Lisää uusi', 'book', 'levylista-textdomain' ),
-        'add_new_item'       => __( 'Lisää uusi levy', 'levylista-textdomain' ),
-        'new_item'           => __( 'Uusi levy', 'levylista-textdomain' ),
-        'edit_item'          => __( 'Muokkaa levyä', 'levylista-textdomain' ),
-        'view_item'          => __( 'Näytä levy', 'levylista-textdomain' ),
-        'all_items'          => __( 'Kaikki levyt', 'levylista-textdomain' ),
-        'search_items'       => __( 'Etsi levyjä', 'levylista-textdomain' ),
-        'not_found'          => __( 'Levyjä ei löytynyt.', 'levylista-textdomain' ),
-        'not_found_in_trash' => __( 'Ei levyjä roskakorissa.', 'levylista-textdomain' )
+        'name'               => _x( 'Levyt', 'post type general name', 'levylista' ),
+        'singular_name'      => _x( 'Levy', 'post type singular name', 'levylista' ),
+        'menu_name'          => _x( 'Levyt', 'admin menu', 'levylista' ),
+        'name_admin_bar'     => _x( 'Levy', 'add new on admin bar', 'levylista' ),
+        'add_new'            => _x( 'Lisää uusi', 'disc', 'levylista' ),
+        'add_new_item'       => __( 'Lisää uusi levy', 'levylista' ),
+        'new_item'           => __( 'Uusi levy', 'levylista' ),
+        'edit_item'          => __( 'Muokkaa levyä', 'levylista' ),
+        'view_item'          => __( 'Näytä levy', 'levylista' ),
+        'all_items'          => __( 'Kaikki levyt', 'levylista' ),
+        'search_items'       => __( 'Etsi levyjä', 'levylista' ),
+        'not_found'          => __( 'Levyjä ei löytynyt.', 'levylista' ),
+        'not_found_in_trash' => __( 'Ei levyjä roskakorissa.', 'levylista' )
     );
 
   register_post_type( 'levylista_levy',
@@ -117,8 +126,10 @@ function levylista_init_shortcodes() {
 add_action( 'init', 'levylista_init_shortcodes' );
 
 function levylista_init_rewrites() {
-    add_rewrite_endpoint( "esittajat", EP_PERMALINK | EP_PAGES );
-    add_rewrite_endpoint( "vuodet", EP_PERMALINK | EP_PAGES );
+    global $levylista_artist_slug;
+    global $levylista_year_slug;
+    add_rewrite_endpoint( $levylista_artist_slug, EP_PERMALINK | EP_PAGES );
+    add_rewrite_endpoint( $levylista_year_slug, EP_PERMALINK | EP_PAGES );
 }
 add_action( 'init', 'levylista_init_rewrites');
 
@@ -130,10 +141,10 @@ add_action( 'init', 'levylista_init_rewrites');
 function change_columns( $cols ) {
     $cols = array(
         'cb'        => '<input type="checkbox" />',
-        'title'     => __( 'Levyn nimi', 'levylista-textdomain'),
-        'levylista_artist'    => __( 'Artisti', 'levylista-textdomain'),
-        'levylista_year'      => __( 'Julkaisuvuosi', 'levylista-textdomain'),
-        'levylista_format'    => __( 'Tyyppi', 'levylista-textdomain')
+        'title'     => __( 'Levyn nimi', 'levylista'),
+        'levylista_artist'    => __( 'Artisti', 'levylista'),
+        'levylista_year'      => __( 'Julkaisuvuosi', 'levylista'),
+        'levylista_format'    => __( 'Tyyppi', 'levylista')
         );
         return $cols;
 }
@@ -221,11 +232,11 @@ add_filter( "manage_edit-levylista_levy_sortable_columns", "sortable_columns" );
 
 add_action( 'add_meta_boxes', 'levylista_meta_boxes' );
 function levylista_meta_boxes() {
-    add_meta_box('levylista-meta-basic-info', "Levyn perustiedot", "levylista_meta_basic_info",
+    add_meta_box('levylista-meta-basic-info', __('Levyn perustiedot', 'levylista'), "levylista_meta_basic_info",
         "levylista_levy", "advanced", "high");
 //     add_meta_box("levylista-meta-lisatiedot", "Levyn lisätiedot", "levylista_meta_additional_info",
 //         "levylista_levy", "side", "high");
-    add_meta_box('levylista-meta-comment', "Kommentit", "levylista_meta_comment",
+    add_meta_box('levylista-meta-comment', __('Kommentit', 'levylista'), "levylista_meta_comment",
         "levylista_levy", "normal", "high");
 
 }
@@ -240,30 +251,29 @@ function levylista_meta_basic_info( $post ) {
     ?>
 
     <fieldset>
-        <label>Esittäjä: <input type="text" name="levylista_artist"
+        <label><?php _e('Esittäjä:', 'levylista') ?> <input type="text" name="levylista_artist"
             value="<?php if ( isset ( $levylista_stored_meta['levylista_artist'] ) )
             echo $levylista_stored_meta['levylista_artist'][0]; ?>"></input></label>
-        <label>Ilmestymisvuosi: <input type="text" name="levylista_year"
+        <label><?php _e('Ilmestymisvuosi:', 'levylista') ?> <input type="text" name="levylista_year"
             value="<?php if ( isset ( $levylista_stored_meta['levylista_year'] ) )
             echo $levylista_stored_meta['levylista_year'][0]; ?>"></input></label>
     </fieldset>
     
     
     <fieldset>
-        <label>Formaatti:
+        <label><?php _e('Formaatti:', 'levylista') ?>
             <select type="normal" name="levylista_format">
             <?foreach ($levylista_formats as $id => $value) { ?>
-                <option value="<? echo $id ?>" <?php if ( isset ( $levylista_stored_meta['levylista_format'] ) )
-                                            selected( $levylista_stored_meta['levylista_format'][0], $id );
-                                            ?>>
-                <?php _e( $value, 'levylista-textdomain' )?></option><?
-             } ?>
+                <option value="<?php echo $id ?>" <?php if ( isset ( $levylista_stored_meta['levylista_format'] ) )
+                                            selected( $levylista_stored_meta['levylista_format'][0], $id );?>>
+                <?php echo $value ?></option>
+            <?php } ?>
             </select>
            </label>
-        <label>Julkaisija: <input type="text" name="levylista_publisher"
+        <label><?php _e('Julkaisija:', 'levylista') ?> <input type="text" name="levylista_publisher"
         value="<?php if ( isset ( $levylista_stored_meta['levylista_publisher'] ) )
         echo $levylista_stored_meta['levylista_publisher'][0]; ?>"></input></label>
-        <label>Kataloginumero: <input type="text" name="levylista_catalogue_number"
+        <label><?php _e('Kataloginumero:', 'levylista') ?> <input type="text" name="levylista_catalogue_number"
         value="<?php if ( isset ( $levylista_stored_meta['levylista_catalogue_number'] ) )
         echo $levylista_stored_meta['levylista_catalogue_number'][0]; ?>"></input></label>
     </fieldset>
@@ -323,12 +333,13 @@ add_action( 'save_post', 'levylista_meta_save' );
 
 
 /*
- * Create artist listning
+ * Create artist listing
  */
 
 function levylista_artists_shortcode() {
-    if( isset( $_GET['esittajat'] )) {
-                $artist = sanitize_text_field(urldecode($_GET['esittajat']));
+    global $levylista_artist_slug;
+    if( isset( $_GET[$levylista_artist_slug] )) {
+                $artist = sanitize_text_field(urldecode($_GET[$levylista_artist_slug]));
                 $args = array(
                     'post_type' => 'levylista_levy',
                     'nopaging' => 'true',
@@ -368,12 +379,13 @@ function levylista_artists_shortcode() {
 }
 
 /*
- * Year listning
+ * Year listing
  */
 
 function levylista_years_shortcode() {
-    if( isset( $_GET['vuodet'] )) {
-                $year = sanitize_text_field(urldecode($_GET['vuodet']));
+    global $levylista_year_slug;
+    if( isset( $_GET[$levylista_year_slug] )) {
+                $year = sanitize_text_field(urldecode($_GET[$levylista_year_slug]));
                 $args = array(
                     'post_type' => 'levylista_levy',
                     'nopaging' => 'true',

@@ -1,4 +1,4 @@
-<?
+<?php
 /* 
  * Template tags to get views and data
  */
@@ -69,10 +69,11 @@ function levylista_the_artist() {
     echo levylista_get_the_artist();
 }
 function levylista_the_artist_url($artist=NULL) {
+    global $levylista_artist_slug;
     if($artist==NULL) {
         $artist = levylista_get_the_artist();
     }
-    echo site_url() . '/esittajat/?esittajat=' . urlencode($artist);
+    echo site_url() . '/' . $levylista_artist_slug . '/?' . $levylista_artist_slug . '=' . urlencode($artist);
 }
 function levylista_the_year() {
     echo levylista_get_the_year();
@@ -89,10 +90,11 @@ function levylista_the_year_url($year=NULL) {
     echo levylista_get_the_year_url($year);
 }
 function levylista_get_the_year_url($year=NULL) {
+    global $levylista_year_slug;
     if($year==NULL) {
         $year = levylista_get_the_year();
     }
-    return site_url() . '/vuodet/?vuodet=' . urlencode($year);
+    return site_url() . '/' . $levylista_year_slug . '/?' . $levylista_year_slug .'=' . urlencode($year);
 }
 
 function levylista_the_publisher() {

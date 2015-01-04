@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  * Single entry view for Levylista plugin.
  * Call: levylista_single_view() 
@@ -6,17 +6,21 @@
  */
 ?>
             <header class="page-content levylista-single-header">
-            <h2><a href="<? levylista_the_artist_url() ?>"><? levylista_the_artist() ?>:</a></h2>
-            <h1><? the_title() ?></h1>
+            <h2><a href="<?php levylista_the_artist_url() ?>"><?php levylista_the_artist() ?>:</a></h2>
+            <h1><?php the_title() ?></h1>
             </header>
             
             <dl class="page-content levylista-data">
-                <dt>Julkaisuvuosi</dt><dd><a href="<? levylista_the_year_url() ?>"><? levylista_the_year() ?></dd>
-                <dt>Tyyppi</dt><dd><? levylista_the_format() ?></dd>
-                <dt>Julkaisija</dt><dd><? levylista_the_publisher() ?></dd>
-                <dt>Kataloginumero</dt><dd><? levylista_the_catalogue_number() ?></dd>
-                <? if(levylista_get_the_comment() != ""){ ?>
-                    <dt>Kommentti</dt>
-                    <dd><blockquote class="levylista-comment"><? levylista_the_comment() ?></blockquote></dd>
-                <? } ?>
+                <dt><?php _e('Julkaisuvuosi', 'levylista') ?></dt>
+                    <dd><a href="<?php levylista_the_year_url() ?>"><?php levylista_the_year() ?></dd>
+                <dt><?php _e('Tyyppi', 'levylista') ?></dt>
+                    <dd><?php levylista_the_format() ?></dd>
+                <dt><?php _e('Julkaisija', 'levylista') ?></dt>
+                    <dd><?php levylista_the_publisher() ?></dd>
+                <dt><?php _e('Kataloginumero', 'levylista') ?></dt>
+                    <dd><?php levylista_the_catalogue_number() ?></dd>
+                <?php if(levylista_get_the_comment() != ""){ ?>
+                    <dt><?php _e('Kommentti', 'levylista') ?></dt>
+                    <dd><blockquote class="levylista-comment"><?php levylista_the_comment() ?></blockquote></dd>
+                <?php } ?>
             </dl>

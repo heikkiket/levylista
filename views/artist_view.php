@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  * Artist view for Levylista plugin
  * call levylista_artist_view() to get this.
