@@ -2,6 +2,17 @@
 /* 
  * Template tags to get views and data
  */
+ 
+ function levylista_single_view($echo=true) {
+    ob_start();
+    include plugin_dir_path( __FILE__ ) . 'single_view.php';
+    $returned = ob_get_contents();
+    ob_end_clean();
+    if($echo)
+        echo $returned;
+    else
+        return $returned;
+}
 
 function levylista_artist_view($query, $echo=true) {
     ob_start();
@@ -70,6 +81,12 @@ function levylista_get_the_year() {
     $post = get_post();
     $levylista_year = get_post_meta( $post->ID, 'levylista_year', true);
     return $levylista_year;
+}
+function levylista_the_year_url($year=NULL) {
+    if($year==NULL) {
+        $year = levylista_get_the_year();
+    }
+    echo site_url() . '/vuodet/?vuodet=' . urlencode($year);
 }
 
 function levylista_the_publisher() {
