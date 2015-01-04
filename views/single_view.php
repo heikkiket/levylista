@@ -5,14 +5,12 @@
  * Must be called inside the loop in order to work.
  */
 ?>
-            <header class="page-content levylista-single-header">
             <h2><a href="<?php levylista_the_artist_url() ?>"><?php levylista_the_artist() ?>:</a></h2>
             <h1><?php the_title() ?></h1>
-            </header>
             
-            <dl class="page-content levylista-data">
+            <dl class="levylista-data">
                 <dt><?php _e('Julkaisuvuosi', 'levylista') ?></dt>
-                    <dd><a href="<?php levylista_the_year_url() ?>"><?php levylista_the_year() ?></dd>
+                    <dd><a href="<?php levylista_the_year_url() ?>"><?php levylista_the_year() ?></a></dd>
                 <dt><?php _e('Tyyppi', 'levylista') ?></dt>
                     <dd><?php levylista_the_format() ?></dd>
                 <dt><?php _e('Julkaisija', 'levylista') ?></dt>
