@@ -86,7 +86,13 @@ function levylista_the_year_url($year=NULL) {
     if($year==NULL) {
         $year = levylista_get_the_year();
     }
-    echo site_url() . '/vuodet/?vuodet=' . urlencode($year);
+    echo levylista_get_the_year_url($year);
+}
+function levylista_get_the_year_url($year=NULL) {
+    if($year==NULL) {
+        $year = levylista_get_the_year();
+    }
+    return site_url() . '/vuodet/?vuodet=' . urlencode($year);
 }
 
 function levylista_the_publisher() {
