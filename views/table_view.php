@@ -9,10 +9,12 @@ if(!isset($query)) global $query;
 ?>
 
 <table class="levylista">
+<tr>
 <th><?php _e('Esittäjä', 'levylista') ?></th>
 <th><?php _e('Albumi', 'levylista') ?></th>
 <th><?php _e('Julkaisuvuosi', 'levylista') ?></th>
 <th><?php _e('Lisätty listaan', 'levylista') ?></th>
+</tr>
 <?php 
 while ( $query->have_posts() ) {
     $query->the_post();
