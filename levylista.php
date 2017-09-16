@@ -54,13 +54,13 @@ $levylista_formats = array(
 /*
  * Enable translations
  */
- 
+
 load_plugin_textdomain('your-unique-name', false, basename( dirname( __FILE__ ) ) . '/languages' );
 
 /*
  * Execute during install
  */
- 
+
 function levylista_activate() {
     levylista_create_post_type();
     flush_rewrite_rules();
@@ -135,7 +135,7 @@ add_action( 'init', 'levylista_init_rewrites');
 
 
 /*
- * Columns 
+ * Columns
  */
 
 function change_columns( $cols ) {
@@ -184,12 +184,12 @@ add_filter( "manage_edit-levylista_levy_sortable_columns", "sortable_columns" );
 // Filter the request to just give posts for the given taxonomy, if applicable.
 // function taxonomy_filter_restrict_manage_posts() {
 //     global $typenow;
-// 
+//
 //     $post_types = get_post_types( array( '_builtin' => false ) );
-// 
+//
 //     if ( in_array( $typenow, $post_types ) ) {
 //     $filters = get_object_taxonomies( $typenow );
-// 
+//
 //         foreach ( $filters as $tax_slug ) {
 //             $tax_obj = get_taxonomy( $tax_slug );
 //             wp_dropdown_categories( array(
@@ -206,11 +206,11 @@ add_filter( "manage_edit-levylista_levy_sortable_columns", "sortable_columns" );
 //     }
 // }
 // add_action( 'restrict_manage_posts', 'taxonomy_filter_restrict_manage_posts' );
-// 
-// 
+//
+//
 // function taxonomy_filter_post_type_request( $query ) {
 // global $pagenow, $typenow;
-// 
+//
 // if ( 'edit.php' == $pagenow ) {
 //     $filters = get_object_taxonomies( $typenow );
 //     foreach ( $filters as $tax_slug ) {
@@ -223,9 +223,9 @@ add_filter( "manage_edit-levylista_levy_sortable_columns", "sortable_columns" );
 // }
 // }
 // add_filter( 'parse_query', 'taxonomy_filter_post_type_request' );
-  
-  
-  
+
+
+
 /**
  * Add meta boxes
  */
@@ -245,7 +245,7 @@ function levylista_meta_basic_info( $post ) {
 
     wp_nonce_field( basename( __FILE__ ), 'levylista_nonce' );
     $levylista_stored_meta = get_post_meta( $post->ID );
-    
+
     global $levylista_formats;
 
     ?>
@@ -258,12 +258,12 @@ function levylista_meta_basic_info( $post ) {
             value="<?php if ( isset ( $levylista_stored_meta['levylista_year'] ) )
             echo $levylista_stored_meta['levylista_year'][0]; ?>"></input></label>
     </fieldset>
-    
-    
+
+
     <fieldset>
         <label><?php _e('Formaatti:', 'levylista') ?>
             <select type="normal" name="levylista_format">
-            <?foreach ($levylista_formats as $id => $value) { ?>
+            <?php foreach ($levylista_formats as $id => $value) { ?>
                 <option value="<?php echo $id ?>" <?php if ( isset ( $levylista_stored_meta['levylista_format'] ) )
                                             selected( $levylista_stored_meta['levylista_format'][0], $id );?>>
                 <?php echo $value ?></option>
@@ -277,29 +277,29 @@ function levylista_meta_basic_info( $post ) {
         value="<?php if ( isset ( $levylista_stored_meta['levylista_catalogue_number'] ) )
         echo $levylista_stored_meta['levylista_catalogue_number'][0]; ?>"></input></label>
     </fieldset>
-    <?
+    <?php
 }
 
-function levylista_meta_additional_info( $post ) { 
+function levylista_meta_additional_info( $post ) {
 
     $levylista_stored_meta = get_post_meta( $post->ID );
-   
+
 }
 
 function levylista_meta_comment( $post ) {
     $levylista_stored_meta = get_post_meta( $post->ID );
     ?>
-    <textarea name="levylista_comment" id="levylista_comment"><?php 
+    <textarea name="levylista_comment" id="levylista_comment"><?php
      if ( isset ( $levylista_stored_meta['levylista_comment'] ) )
      echo $levylista_stored_meta['levylista_comment'][0]; ?></textarea>
-    <?
+    <?php
 }
 
 /**
  * Saves the custom meta input
  */
 function levylista_meta_save( $post_id ) {
-    
+
     $levylista_data = array(
         'levylista_artist',
         'levylista_year',
@@ -308,26 +308,26 @@ function levylista_meta_save( $post_id ) {
         'levylista_catalogue_number',
         'levylista_comment'
         );
- 
+
     // Checks save status
     $is_autosave = wp_is_post_autosave( $post_id );
-    $is_revision = wp_is_post_revision( $post_id ); 
+    $is_revision = wp_is_post_revision( $post_id );
     $is_valid_nonce = ( isset( $_POST[ 'levylista_nonce' ] ) &&
                         wp_verify_nonce( $_POST[ 'levylista_nonce' ], basename( __FILE__ ) ) ) ? 'true' : 'false';
- 
+
     // Exits script depending on save status
     if ( $is_autosave || $is_revision || !$is_valid_nonce ) {
         return;
     }
- 
+
     // Checks for input and sanitizes/saves if needed
     foreach ($levylista_data as $meta) {
         if( isset( $_POST[ $meta ] ) ) {
             update_post_meta( $post_id, $meta, sanitize_text_field( $_POST[ $meta ] ) );
         }
     }
-        
- 
+
+
 }
 add_action( 'save_post', 'levylista_meta_save' );
 
@@ -368,14 +368,14 @@ function levylista_artists_shortcode() {
         $counted = levylista_count_albums($query);
         $artists = $counted['artists'];
         $albums = $counted['albums'];
-        
+
         if($_GET['orderby']== 'albumcount') {
             array_multisort($albums, SORT_DESC, $artists);
         }
-        
+
         return levylista_artist_list_view($artists, false);
     }
-    
+
 }
 
 /*
@@ -414,14 +414,14 @@ function levylista_years_shortcode() {
         $counted = levylista_count_albums($query);
         $years = $counted['artists'];
         $albums = $counted['albums'];
-        
+
         if($_GET['orderby']== 'artist') {
             array_multisort($albums, SORT_DESC, $years);
         }
-        
+
         return levylista_artist_view($years, false);
     }
-    
+
 }
 
 /*
@@ -447,14 +447,14 @@ function levylista_count_albums($query) {
             $artists[$artist]['albums']++;
             $albums[$artist]++;
         }
-        
+
         $formats[$format]++;
         $years[$year]++;
     }
-        
+
     arsort($years);
     arsort($formats);
-        
+
     return array ( 'artists' => $artists, 'albums' => $albums, 'years' => $years, 'formats' => $formats);
 }
 
@@ -473,10 +473,10 @@ function levylista_statistics_shortcode() {
         );
     $query = new WP_query($args);
     $counted = levylista_count_albums($query);
-    
+
     $how_many_albums = wp_count_posts('levylista_levy')->publish;
     $how_many_artists = count($counted['artists']);
-        
+
     return levylista_stats_view($counted, $how_many_albums, $how_many_artists);
 
 }
@@ -485,10 +485,10 @@ function levylista_statistics_shortcode() {
  */
 
 function levylista_custom_search_where($pieces) {
- 
+
     // filter to select search query
     if (is_search() && !is_admin()) {
- 
+
         global $wpdb;
         $custom_fields = array('levylista_artist','levylista_publisher', 'levylista_comment');
         $keywords = explode(' ', get_query_var('s'));
@@ -499,11 +499,11 @@ function levylista_custom_search_where($pieces) {
                  $query .= " AND (mypm1.meta_value  LIKE '%{$word}%')) OR ";
              }
         }
- 
+
         if (!empty($query)) {
             // add to where clause
             $pieces['where'] = str_replace("(((" . $wpdb->prefix . "posts.post_title LIKE '%", "( {$query} (( " . $wpdb->prefix . "posts.post_title LIKE '%", $pieces['where']);
- 
+
             $pieces['join'] = $pieces['join'] . " INNER JOIN {$wpdb->postmeta} AS mypm1 ON ({$wpdb->posts}.ID = mypm1.post_id)";
         }
     }
